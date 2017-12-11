@@ -1,4 +1,6 @@
-class Player{
+import java.awt.*;
+
+class Player {
     boolean left, right;
     private int x = 600;
     private static final int Y = 650;
@@ -55,4 +57,10 @@ class Player{
         return Y;
     }
 
+    public DrowObj getDrowObj() {
+        return g -> {
+            g.setColor(new Color(0xffff0000));//Вынести в константы графики
+            g.fillRoundRect(x, Y, WINDTH, HIGHT, 10, 10);
+        };
+    }
 }

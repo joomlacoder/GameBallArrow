@@ -1,4 +1,5 @@
 import java.awt.event.*;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Game extends Thread  implements ActionListener{
@@ -9,11 +10,14 @@ public class Game extends Thread  implements ActionListener{
     private Player player = new Player();
     private Arrow arrow = new Arrow();
     private CopyOnWriteArrayList <Ball> balls = new CopyOnWriteArrayList<Ball>();
+    private List<DrowObj> drowObjs;
 
-    Game(){
-        balls.add(new Ball(START_BALL_PARAM[0], START_BALL_PARAM[1],
-                START_BALL_PARAM[2], START_BALL_PARAM[3], START_BALL_PARAM[4]));
-
+    Game(List<DrowObj> list){
+        drowObjs = list;
+        newBall(START_BALL_PARAM[0], START_BALL_PARAM[1],
+                START_BALL_PARAM[2], START_BALL_PARAM[3], START_BALL_PARAM[4]);
+        list.add(player.getDrowObj());
+        list.add(arrow.getDrowObj());
     }
 
     private boolean isCollisionBall(Ball ball, String parm){
@@ -35,9 +39,9 @@ public class Game extends Thread  implements ActionListener{
         if(ball.isTurn()) {
             if (isCollisionBall(ball, "arow")) {
                 respawn(ball);
-                balls.remove(ball);
+                removeBall(ball);
             } else if (isCollisionBall(ball, ""))
-                balls.remove(ball);
+                removeBall(ball);
         } else ball.doTurn();
     }
 
@@ -50,12 +54,24 @@ public class Game extends Thread  implements ActionListener{
         arrow.aplay();
     }
 
-    void respawn(Ball ball) {
+    private void respawn(Ball ball) {
         int BallD = ball.getD()/2;
         if(BallD >= MIN_BALL_D) {
-            balls.add(new Ball(ball.getX(), ball.getY(), BallD, 3, ball.getSpeed()));
-            balls.add(new Ball(ball.getX(), ball.getY(), BallD, -3, ball.getSpeed()));
+            balls.add(newBall(ball.getX(), ball.getY(), BallD, 3, ball.getSpeed()));
+            balls.add(newBall(ball.getX(), ball.getY(), BallD, -3, ball.getSpeed()));
         }
+    }
+
+    private Ball newBall(int x, int y, int d, int direction, int speed){
+        Ball ball = new Ball(x, y, d, direction, speed);
+        balls.add(ball);
+        drowObjs.add(ball.getDrowObj());
+        return ball;
+    }
+
+    private void removeBall(Ball ball){
+        balls.remove(ball);
+        drowObjs.remove(ball.getDrowObj());
     }
 
     public void actionPerformed(ActionEvent arg0) {
@@ -67,7 +83,7 @@ public class Game extends Thread  implements ActionListener{
             public void keyPressed(KeyEvent arg0) {
 // System.out.println("P="+arg0.getKeyCode());
                 switch(arg0.getKeyCode()){
-                    case 82:{balls.add(new Ball(10, 10, 100, 3, 0)); break;}
+                    case 82:{newBall(10, 10, 100, 3, 0); break;}
                     case 37:{player.left = true; break;}
                     case 39:{player.right = true; break;}
                     case 32:{arrow.fire(player.getX()); break;}

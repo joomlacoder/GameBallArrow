@@ -1,4 +1,6 @@
-class Arrow{
+import java.awt.*;
+
+class Arrow {
 
     private static final int HALF_PLAYER = 13;
     private static final int SPEAD = 10;
@@ -48,5 +50,12 @@ class Arrow{
 
     public void setFire(boolean fire) {
         this.fire = fire;
+    }
+
+    public DrowObj getDrowObj() {
+        return g -> {
+            g.setColor(new Color(0xff00ff00));
+            g.fillRoundRect(x, y, 2, HEDTH, 10, 10);
+        };
     }
 }

@@ -1,4 +1,6 @@
-class Ball {
+import java.awt.*;
+
+class Ball{
 
     private static final int ACCELERATION = 1;
     private static final int END_WINDOW_Y = Main.HIGTH;
@@ -13,6 +15,7 @@ class Ball {
     private int direction = 3;
     private int oldX;
     private boolean turn = false;
+    private DrowObj drowObj;
 
     void aplay(){
         setSpeed(speed + ACCELERATION);
@@ -34,8 +37,8 @@ class Ball {
             turn = true;
     }
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
+    @Override //Лучше через конструктор клонирования
+    protected Ball clone() {
         return new Ball(x, y, d, direction, speed);
     }
 
@@ -98,5 +101,15 @@ class Ball {
 
     public boolean isTurn() {
         return turn;
+    }
+
+
+    public DrowObj getDrowObj() {
+        if(drowObj == null)
+            drowObj = g -> {
+            g.setColor(new Color(0xff0000ff));
+            g.fillOval(x, y, d, d);
+        };
+        return drowObj;
     }
 }
