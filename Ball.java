@@ -106,7 +106,7 @@ class Ball{
 
     public DrowObj getDrowObj() {
         if(drowObj == null)
-            drowObj = g -> {
+        drowObj = g -> {
             g.setColor(new Color(0xff0000ff));
             g.fillOval(x, y, d, d);
         };

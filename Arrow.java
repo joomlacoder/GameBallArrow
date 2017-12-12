@@ -4,7 +4,7 @@ class Arrow {
 
     private static final int HALF_PLAYER = 13;
     private static final int SPEAD = 10;
-    private static final int START_Y = 550;
+    private static final int START_Y = 650;
     private static final int HEDTH = 400;
 
     private int x = -100;
